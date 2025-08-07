@@ -1,8 +1,10 @@
 package com.example.schedulemanagementdevelopapi.schedule.service;
 
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import com.example.schedulemanagementdevelopapi.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +44,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleSearchResponseDto findById(Long id) {
 
         return ScheduleSearchResponseDto.from(scheduleRepository.findByIdOrElseThrow(id));
+    }
+
+    @Override
+    @Transactional
+    public ScheduleUpdateResponseDto update(Long id, ScheduleUpdateRequestDto requestDto) {
+
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        findSchedule.updateWriter(requestDto.getWriter());
+        findSchedule.updateTitle(requestDto.getTitle());
+
+        return ScheduleUpdateResponseDto.from(findSchedule);
     }
 }
