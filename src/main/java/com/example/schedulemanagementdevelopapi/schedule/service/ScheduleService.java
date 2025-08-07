@@ -11,4 +11,6 @@ public interface ScheduleService {
     ScheduleSaveResponseDto save(String writer, String title, String content);
 
     List<ScheduleSearchResponseDto> search(ScheduleSearchConditionDto cond);
+
+    ScheduleSearchResponseDto findById(Long id);
 }
