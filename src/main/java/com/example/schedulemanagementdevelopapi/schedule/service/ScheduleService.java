@@ -1,24 +1,14 @@
 package com.example.schedulemanagementdevelopapi.schedule.service;
 
+import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
-import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
-import com.example.schedulemanagementdevelopapi.schedule.repository.ScheduleRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
 
-@Service
-@RequiredArgsConstructor
-public class ScheduleService {
+import java.util.List;
 
-    private final ScheduleRepository scheduleRepository;
+public interface ScheduleService {
 
-    @Transactional
-    public ScheduleSaveResponseDto save(String writer, String title, String content) {
+    ScheduleSaveResponseDto save(String writer, String title, String content);
 
-        Schedule schedule = new Schedule(writer, title, content);
-        Schedule savedSchedule = scheduleRepository.save(schedule);
-
-        return ScheduleSaveResponseDto.from(savedSchedule);
-    }
+    List<ScheduleSearchResponseDto> search(ScheduleSearchConditionDto cond);
 }

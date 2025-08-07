@@ -1,15 +1,16 @@
 package com.example.schedulemanagementdevelopapi.schedule.controller;
 
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSaveRequestDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -31,6 +32,14 @@ public class ScheduleController {
                 );
 
         return ResponseEntity.ok(scheduleSaveResponseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ScheduleSearchResponseDto>> search(
+            @ModelAttribute ScheduleSearchConditionDto cond
+    ) {
+
+        return ResponseEntity.ok(scheduleService.search(cond));
     }
 
 }
