@@ -34,4 +34,10 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .map(ScheduleSearchResponseDto::from)
                 .toList();
     }
+
+    @Override
+    public ScheduleSearchResponseDto findById(Long id) {
+
+        return ScheduleSearchResponseDto.from(scheduleRepository.findByIdOrElseThrow(id));
+    }
 }

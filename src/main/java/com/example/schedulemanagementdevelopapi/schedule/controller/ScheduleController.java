@@ -42,4 +42,12 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.search(cond));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleSearchResponseDto> findById(
+            @PathVariable Long id
+    ) {
+
+        return ResponseEntity.ok(scheduleService.findById(id));
+    }
+
 }
