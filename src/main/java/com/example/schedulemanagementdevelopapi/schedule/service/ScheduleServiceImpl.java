@@ -17,6 +17,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Override
     @Transactional
     public ScheduleSaveResponseDto save(String writer, String title, String content) {
 
@@ -26,6 +27,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return ScheduleSaveResponseDto.from(savedSchedule);
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<ScheduleSearchResponseDto> search(ScheduleSearchConditionDto cond) {
 
@@ -36,6 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ScheduleSearchResponseDto findById(Long id) {
 
         return ScheduleSearchResponseDto.from(scheduleRepository.findByIdOrElseThrow(id));
