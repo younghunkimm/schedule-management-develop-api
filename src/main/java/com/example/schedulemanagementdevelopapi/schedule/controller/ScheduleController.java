@@ -2,8 +2,10 @@ package com.example.schedulemanagementdevelopapi.schedule.controller;
 
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSaveRequestDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,15 @@ public class ScheduleController {
     ) {
 
         return ResponseEntity.ok(scheduleService.findById(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleUpdateResponseDto> update(
+            @PathVariable Long id,
+            @Valid @RequestBody ScheduleUpdateRequestDto requestDto
+    ) {
+
+        return ResponseEntity.ok(scheduleService.update(id, requestDto));
     }
 
 }
