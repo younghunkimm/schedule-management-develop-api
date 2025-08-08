@@ -52,7 +52,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findById(id));
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<MemberUpdateResponseDto> update(
             @PathVariable Long id,
             @Valid @RequestBody MemberUpdateRequestDto requestDto
