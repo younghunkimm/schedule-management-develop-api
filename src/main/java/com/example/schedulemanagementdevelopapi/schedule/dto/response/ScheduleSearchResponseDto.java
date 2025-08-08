@@ -11,13 +11,12 @@ public record ScheduleSearchResponseDto(
         String content,
         LocalDateTime createdAt,
         LocalDateTime modifiedAt
-
 ) {
 
     public static ScheduleSearchResponseDto from(Schedule schedule) {
         return new ScheduleSearchResponseDto(
                 schedule.getId(),
-                schedule.getWriter(),
+                schedule.getMember().getName(),
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt(),

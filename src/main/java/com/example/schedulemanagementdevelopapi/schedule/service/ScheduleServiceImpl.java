@@ -1,9 +1,11 @@
 package com.example.schedulemanagementdevelopapi.schedule.service;
 
+import com.example.schedulemanagementdevelopapi.member.entity.Member;
+import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleUpdateRequestDto;
-import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import com.example.schedulemanagementdevelopapi.schedule.repository.ScheduleRepository;
@@ -18,12 +20,15 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
-    public ScheduleSaveResponseDto save(String writer, String title, String content) {
+    public ScheduleSaveResponseDto save(Long memberId, String title, String content) {
 
-        Schedule schedule = new Schedule(writer, title, content);
+        Member findMember = memberRepository.findByIdOrElseThrow(memberId);
+
+        Schedule schedule = new Schedule(findMember, title, content);
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
         return ScheduleSaveResponseDto.from(savedSchedule);
@@ -51,7 +56,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleUpdateResponseDto update(Long id, ScheduleUpdateRequestDto requestDto) {
 
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
-        findSchedule.updateWriter(requestDto.getWriter());
         findSchedule.updateTitle(requestDto.getTitle());
 
         return ScheduleUpdateResponseDto.from(findSchedule);

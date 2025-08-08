@@ -8,7 +8,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ScheduleSearchConditionDto {
 
-    private String writer;
-
     private String title;
 }

@@ -22,18 +22,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
         return queryFactory
                 .selectFrom(qSchedule)
                 .where(
-                        eqWriter(cond.getWriter()),
                         containsTitle(cond.getTitle())
                 )
                 .where(qSchedule.deletedAt.isNull())
                 .orderBy(qSchedule.modifiedAt.desc())
                 .fetch();
-    }
-
-    private BooleanExpression eqWriter(String writer) {
-        return (StringUtils.hasText(writer))
-                ? qSchedule.writer.eq(writer)
-                : null;
     }
 
     private BooleanExpression containsTitle(String title) {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    ScheduleSaveResponseDto save(String writer, String title, String content);
+    ScheduleSaveResponseDto save(Long memberId, String title, String content);
 
     List<ScheduleSearchResponseDto> search(ScheduleSearchConditionDto cond);
 
