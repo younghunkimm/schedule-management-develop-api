@@ -36,4 +36,11 @@ public class MemberServiceImpl implements MemberService {
                 .map(MemberSearchResponseDto::from)
                 .toList();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MemberSearchResponseDto findById(Long id) {
+
+        return MemberSearchResponseDto.from(memberRepository.findByIdOrElseThrow(id));
+    }
 }

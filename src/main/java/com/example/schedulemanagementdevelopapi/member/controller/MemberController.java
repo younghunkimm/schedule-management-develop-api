@@ -42,4 +42,12 @@ public class MemberController {
         return ResponseEntity.ok(memberService.search(cond));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberSearchResponseDto> findById(
+            @PathVariable Long id
+    ) {
+
+        return ResponseEntity.ok(memberService.findById(id));
+    }
+
 }
