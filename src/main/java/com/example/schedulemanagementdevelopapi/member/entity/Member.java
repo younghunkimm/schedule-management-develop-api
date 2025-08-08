@@ -28,4 +28,12 @@ public class Member extends SoftDeletableEntity {
         this.password = password;
     }
 
+    public void updateName(String newName) {
+        this.name = newName;
+    }
+
+    public void updateEmail(String newEmail) {
+        this.email = newEmail;
+    }
+
 }
