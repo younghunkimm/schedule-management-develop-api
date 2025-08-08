@@ -25,6 +25,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                         eqWriter(cond.getWriter()),
                         containsTitle(cond.getTitle())
                 )
+                .where(qSchedule.deletedAt.isNull())
                 .orderBy(qSchedule.modifiedAt.desc())
                 .fetch();
     }

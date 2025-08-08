@@ -56,4 +56,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return ScheduleUpdateResponseDto.from(findSchedule);
     }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        findSchedule.softDelete();
+    }
 }

@@ -1,6 +1,6 @@
 package com.example.schedulemanagementdevelopapi.schedule.entity;
 
-import com.example.schedulemanagementdevelopapi.global.entity.BaseEntity;
+import com.example.schedulemanagementdevelopapi.global.entity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Schedule extends BaseEntity {
+public class Schedule extends SoftDeletableEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
