@@ -10,4 +10,6 @@ public interface MemberService {
     MemberSaveResponseDto save(String name, String email, String password);
 
     List<MemberSearchResponseDto> search(MemberSearchConditionDto cond);
+
+    MemberSearchResponseDto findById(Long id);
 }
