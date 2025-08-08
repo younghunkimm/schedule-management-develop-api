@@ -7,6 +7,7 @@ import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveRe
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.service.MemberService;
+import com.example.schedulemanagementdevelopapi.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final ScheduleService scheduleService;
 
     @PostMapping
     public ResponseEntity<MemberSaveResponseDto> save(
@@ -59,6 +61,16 @@ public class MemberController {
     ) {
 
         return ResponseEntity.ok(memberService.update(id, requestDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    ) {
+
+        memberService.delete(id);
+
+        return ResponseEntity.ok().build();
     }
 
 }

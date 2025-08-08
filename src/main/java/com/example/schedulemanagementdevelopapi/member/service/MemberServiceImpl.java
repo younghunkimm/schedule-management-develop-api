@@ -56,4 +56,13 @@ public class MemberServiceImpl implements MemberService {
 
         return MemberUpdateResponseDto.from(findMember);
     }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+
+        Member findMember = memberRepository.findByIdOrElseThrow(id);
+
+        findMember.softDelete();
+    }
 }

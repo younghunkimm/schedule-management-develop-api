@@ -16,4 +16,6 @@ public interface MemberService {
     MemberSearchResponseDto findById(Long id);
 
     MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto requestDto);
+
+    void delete(Long id);
 }
