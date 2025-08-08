@@ -1,8 +1,10 @@
 package com.example.schedulemanagementdevelopapi.member.service;
 
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSearchConditionDto;
+import com.example.schedulemanagementdevelopapi.member.dto.request.MemberUpdateRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
+import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +44,16 @@ public class MemberServiceImpl implements MemberService {
     public MemberSearchResponseDto findById(Long id) {
 
         return MemberSearchResponseDto.from(memberRepository.findByIdOrElseThrow(id));
+    }
+
+    @Override
+    @Transactional
+    public MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto requestDto) {
+
+        Member findMember = memberRepository.findByIdOrElseThrow(id);
+        findMember.updateName(requestDto.getName());
+        findMember.updateEmail(requestDto.getEmail());
+
+        return MemberUpdateResponseDto.from(findMember);
     }
 }
