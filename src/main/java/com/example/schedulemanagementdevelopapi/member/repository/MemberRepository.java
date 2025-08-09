@@ -15,4 +15,11 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
         return findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "삭제되었거나 존재하지 않는 유저입니다."));
     }
+
+    Optional<Member> findByEmailAndDeletedAtIsNull(String email);
+
+    default Member findByEmailOrElseThrow(String email) {
+
+        return findByEmailAndDeletedAtIsNull(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "올바른 이메일이 아니거나 삭제된 유저입니다."));
+    }
 }

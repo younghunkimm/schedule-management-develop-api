@@ -1,7 +1,9 @@
 package com.example.schedulemanagementdevelopapi.member.service;
 
+import com.example.schedulemanagementdevelopapi.member.dto.request.MemberLoginRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberUpdateRequestDto;
+import com.example.schedulemanagementdevelopapi.member.dto.response.MemberLoginResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
@@ -18,4 +20,6 @@ public interface MemberService {
     MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto requestDto);
 
     void delete(Long id);
+
+    MemberLoginResponseDto login(MemberLoginRequestDto requestDto);
 }

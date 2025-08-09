@@ -1,13 +1,16 @@
 package com.example.schedulemanagementdevelopapi.member.controller;
 
+import com.example.schedulemanagementdevelopapi.member.dto.request.MemberLoginRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSaveRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberUpdateRequestDto;
+import com.example.schedulemanagementdevelopapi.member.dto.response.MemberLoginResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.service.MemberService;
-import com.example.schedulemanagementdevelopapi.schedule.service.ScheduleService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +24,23 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final ScheduleService scheduleService;
 
-    @PostMapping
-    public ResponseEntity<MemberSaveResponseDto> save(
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(
+            @Valid @RequestBody MemberLoginRequestDto requestDto,
+            HttpServletRequest httpRequest
+    ) {
+
+        MemberLoginResponseDto memberLoginResponseDto = memberService.login(requestDto);
+
+        HttpSession session = httpRequest.getSession();
+        session.setAttribute("LOGIN_MEMBER", memberLoginResponseDto.id());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<MemberSaveResponseDto> signup(
             @Valid @RequestBody MemberSaveRequestDto requestDto
     ) {
 
