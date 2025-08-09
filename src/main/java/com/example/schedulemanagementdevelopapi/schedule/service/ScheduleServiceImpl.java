@@ -53,9 +53,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public ScheduleUpdateResponseDto update(Long id, ScheduleUpdateRequestDto requestDto) {
+    public ScheduleUpdateResponseDto update(Long id, Long memberId, ScheduleUpdateRequestDto requestDto) {
 
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findByIdAndMember_IdOrElseThrow(id, memberId);
         findSchedule.updateTitle(requestDto.getTitle());
         findSchedule.updateContent(requestDto.getContent());
 
@@ -64,9 +64,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, Long memberId) {
 
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findByIdAndMember_IdOrElseThrow(id, memberId);
 
         findSchedule.softDelete();
     }

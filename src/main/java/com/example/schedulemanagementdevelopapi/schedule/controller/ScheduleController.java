@@ -23,12 +23,13 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleSaveResponseDto> save(
+            @SessionAttribute("LOGIN_MEMBER") Long memberId,
             @Valid @RequestBody ScheduleSaveRequestDto requestDto
     ) {
 
         ScheduleSaveResponseDto scheduleSaveResponseDto =
                 scheduleService.save(
-                        requestDto.getMemberId(),
+                        memberId,
                         requestDto.getTitle(),
                         requestDto.getContent()
                 );
@@ -55,18 +56,20 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleUpdateResponseDto> update(
             @PathVariable Long id,
+            @SessionAttribute("LOGIN_MEMBER") Long memberId,
             @Valid @RequestBody ScheduleUpdateRequestDto requestDto
     ) {
 
-        return ResponseEntity.ok(scheduleService.update(id, requestDto));
+        return ResponseEntity.ok(scheduleService.update(id, memberId, requestDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @SessionAttribute("LOGIN_MEMBER") Long memberId
     ) {
 
-        scheduleService.delete(id);
+        scheduleService.delete(id, memberId);
 
         return ResponseEntity.ok().build();
     }
