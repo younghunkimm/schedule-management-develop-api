@@ -9,7 +9,9 @@ import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveRe
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,27 @@ public class MemberController {
 
         HttpSession session = httpRequest.getSession();
         session.setAttribute("LOGIN_MEMBER", memberLoginResponseDto.id());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse
+    ) {
+
+        // 세션 제거
+        HttpSession session = httpRequest.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // 브라우저 쿠키 제거
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        httpResponse.addCookie(cookie);
 
         return ResponseEntity.ok().build();
     }
