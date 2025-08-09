@@ -1,4 +1,4 @@
-package com.example.schedulemanagementdevelopapi.config;
+package com.example.schedulemanagementdevelopapi.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
