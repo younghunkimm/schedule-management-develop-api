@@ -1,9 +1,10 @@
 package com.example.schedulemanagementdevelopapi.schedule.repository;
 
+import com.example.schedulemanagementdevelopapi.global.exception.NotFoundException;
+import com.example.schedulemanagementdevelopapi.global.exception.UnAuthorizedException;
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
+import com.example.schedulemanagementdevelopapi.schedule.exception.ScheduleErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
 
     default Schedule findByIdOrElseThrow(Long id) {
 
-        return findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "삭제되었거나 존재하지 않는 일정입니다."));
+        return findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new NotFoundException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
     }
 
     // 연관관계 Member Entity의 id(Member -> @Id의 필드명) 필드를 찾기 위해 '_' 를 사용
@@ -23,6 +24,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
 
     default Schedule findByIdAndMember_IdOrElseThrow(Long id, Long memberId) {
 
-        return findByIdAndMember_IdAndDeletedAtIsNull(id, memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제할 권한이 없습니다."));
+        return findByIdAndMember_IdAndDeletedAtIsNull(id, memberId).orElseThrow(() -> new UnAuthorizedException(ScheduleErrorCode.ACCESS_DENIED));
     }
 }

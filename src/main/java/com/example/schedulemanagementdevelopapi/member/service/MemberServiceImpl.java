@@ -1,5 +1,6 @@
 package com.example.schedulemanagementdevelopapi.member.service;
 
+import com.example.schedulemanagementdevelopapi.global.exception.UnAuthorizedException;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberLoginRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberUpdateRequestDto;
@@ -8,13 +9,12 @@ import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveRe
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
+import com.example.schedulemanagementdevelopapi.member.exception.MemberErrorCode;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
         Member findMember = memberRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
         if (false == ObjectUtils.nullSafeEquals(findMember.getPassword(), requestDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다.");
+            throw new UnAuthorizedException(MemberErrorCode.INVALID_PASSWORD);
         }
 
         return new MemberLoginResponseDto(findMember.getId());
