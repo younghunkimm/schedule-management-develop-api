@@ -1,6 +1,9 @@
 package com.example.schedulemanagementdevelopapi.member.entity;
 
+import com.example.schedulemanagementdevelopapi.global.config.PasswordEncoder;
 import com.example.schedulemanagementdevelopapi.global.entity.SoftDeletableEntity;
+import com.example.schedulemanagementdevelopapi.global.exception.UnAuthorizedException;
+import com.example.schedulemanagementdevelopapi.member.exception.MemberErrorCode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +27,13 @@ public class Member extends SoftDeletableEntity {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public void verifyPasswordOrThrow(PasswordEncoder encoder, String rawPassword) {
+
+        if (false == encoder.matches(rawPassword, password)) {
+            throw new UnAuthorizedException(MemberErrorCode.INVALID_PASSWORD);
+        }
     }
 
     public void updateName(String newName) {

@@ -1,6 +1,6 @@
 package com.example.schedulemanagementdevelopapi.member.service;
 
-import com.example.schedulemanagementdevelopapi.global.exception.UnAuthorizedException;
+import com.example.schedulemanagementdevelopapi.global.config.PasswordEncoder;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberLoginRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberUpdateRequestDto;
@@ -9,12 +9,10 @@ import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveRe
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
-import com.example.schedulemanagementdevelopapi.member.exception.MemberErrorCode;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -23,6 +21,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -30,9 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member findMember = memberRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
-        if (false == ObjectUtils.nullSafeEquals(findMember.getPassword(), requestDto.getPassword())) {
-            throw new UnAuthorizedException(MemberErrorCode.INVALID_PASSWORD);
-        }
+        findMember.verifyPasswordOrThrow(passwordEncoder, requestDto.getPassword());
 
         return new MemberLoginResponseDto(findMember.getId());
     }
@@ -41,7 +38,9 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberSaveResponseDto save(String name, String email, String password) {
 
-        Member member = new Member(name, email, password);
+        String encodedPassword = passwordEncoder.encode(password);
+
+        Member member = new Member(name, email, encodedPassword);
         Member savedMember = memberRepository.save(member);
 
         return MemberSaveResponseDto.from(savedMember);
