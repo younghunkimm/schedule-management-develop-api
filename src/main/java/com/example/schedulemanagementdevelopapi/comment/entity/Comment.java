@@ -6,6 +6,7 @@ import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 @Entity
 @Getter
@@ -30,6 +31,10 @@ public class Comment extends SoftDeletableEntity {
         this.member = member;
         this.schedule = schedule;
         this.content = content;
+    }
+
+    public boolean isOwnedBy(Long memberId) {
+        return ObjectUtils.nullSafeEquals(memberId, this.member.getId());
     }
 
     public void updateContent(String content) {
