@@ -39,11 +39,11 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleSearchSummaryResponseDto>> search(
+    public ResponseEntity<List<ScheduleSearchSummaryResponseDto>> searchWithCommentCount(
             @ModelAttribute ScheduleSearchConditionDto cond
     ) {
 
-        return ResponseEntity.ok(scheduleService.search(cond));
+        return ResponseEntity.ok(scheduleService.searchWithCommentCount(cond));
     }
 
     @GetMapping("/{id}")
