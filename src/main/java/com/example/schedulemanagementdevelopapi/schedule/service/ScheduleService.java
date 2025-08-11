@@ -13,7 +13,7 @@ public interface ScheduleService {
 
     ScheduleSaveResponseDto save(Long memberId, String title, String content);
 
-    List<ScheduleSearchSummaryResponseDto> search(ScheduleSearchConditionDto cond);
+    List<ScheduleSearchSummaryResponseDto> searchWithCommentCount(ScheduleSearchConditionDto cond);
 
     ScheduleSearchDetailResponseDto findById(Long id);
 

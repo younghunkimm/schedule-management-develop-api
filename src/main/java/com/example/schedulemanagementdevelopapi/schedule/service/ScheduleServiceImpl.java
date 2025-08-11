@@ -41,12 +41,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ScheduleSearchSummaryResponseDto> search(ScheduleSearchConditionDto cond) {
+    public List<ScheduleSearchSummaryResponseDto> searchWithCommentCount(ScheduleSearchConditionDto cond) {
 
-        return scheduleRepository.search(cond)
-                .stream()
-                .map(ScheduleSearchSummaryResponseDto::from)
-                .toList();
+        return scheduleRepository.searchWithCommentCount(cond);
     }
 
     @Override
