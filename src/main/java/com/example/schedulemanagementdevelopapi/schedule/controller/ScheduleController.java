@@ -4,7 +4,8 @@ import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSav
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
-import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchDetailResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchSummaryResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -38,7 +39,7 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleSearchResponseDto>> search(
+    public ResponseEntity<List<ScheduleSearchSummaryResponseDto>> search(
             @ModelAttribute ScheduleSearchConditionDto cond
     ) {
 
@@ -46,7 +47,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleSearchResponseDto> findById(
+    public ResponseEntity<ScheduleSearchDetailResponseDto> findById(
             @PathVariable Long id
     ) {
 

@@ -4,7 +4,7 @@ import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 
 import java.time.LocalDateTime;
 
-public record ScheduleSearchResponseDto(
+public record ScheduleSearchSummaryResponseDto(
         Long id,
         String writer,
         String title,
@@ -13,8 +13,8 @@ public record ScheduleSearchResponseDto(
         LocalDateTime modifiedAt
 ) {
 
-    public static ScheduleSearchResponseDto from(Schedule schedule) {
-        return new ScheduleSearchResponseDto(
+    public static ScheduleSearchSummaryResponseDto from(Schedule schedule) {
+        return new ScheduleSearchSummaryResponseDto(
                 schedule.getId(),
                 schedule.getMember().getName(),
                 schedule.getTitle(),

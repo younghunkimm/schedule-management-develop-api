@@ -1,11 +1,15 @@
 package com.example.schedulemanagementdevelopapi.schedule.service;
 
+import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentSearchResponseDto;
+import com.example.schedulemanagementdevelopapi.comment.entity.Comment;
+import com.example.schedulemanagementdevelopapi.comment.repository.CommentRepository;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleUpdateRequestDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSaveResponseDto;
-import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchDetailResponseDto;
+import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchSummaryResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import com.example.schedulemanagementdevelopapi.schedule.repository.ScheduleRepository;
@@ -21,6 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -36,19 +41,27 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ScheduleSearchResponseDto> search(ScheduleSearchConditionDto cond) {
+    public List<ScheduleSearchSummaryResponseDto> search(ScheduleSearchConditionDto cond) {
 
         return scheduleRepository.search(cond)
                 .stream()
-                .map(ScheduleSearchResponseDto::from)
+                .map(ScheduleSearchSummaryResponseDto::from)
                 .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ScheduleSearchResponseDto findById(Long id) {
+    public ScheduleSearchDetailResponseDto findById(Long id) {
 
-        return ScheduleSearchResponseDto.from(scheduleRepository.findByIdOrElseThrow(id));
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        List<Comment> findCommentList = commentRepository.findCommentsByScheduleIdAndDeletedAtIsNullOrderByModifiedAtDesc(findSchedule.getId());
+
+        return ScheduleSearchDetailResponseDto.from(
+                findSchedule,
+                findCommentList.stream()
+                        .map(CommentSearchResponseDto::from)
+                        .toList()
+        );
     }
 
     @Override
