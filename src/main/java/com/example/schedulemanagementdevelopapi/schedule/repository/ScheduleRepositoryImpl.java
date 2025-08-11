@@ -5,6 +5,7 @@ import com.example.schedulemanagementdevelopapi.member.entity.QMember;
 import com.example.schedulemanagementdevelopapi.schedule.dto.request.ScheduleSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchSummaryResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.entity.QSchedule;
+import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -13,11 +14,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public Optional<Schedule> findWithMemberById(Long id) {
+
+        QSchedule qSchedule = QSchedule.schedule;
+
+        return Optional.ofNullable(
+                queryFactory
+                        .selectFrom(qSchedule)
+                        .join(qSchedule.member).fetchJoin()
+                        .where(
+                                qSchedule.id.eq(id),
+                                qSchedule.deletedAt.isNull()
+                        )
+                        .fetchOne()
+        );
+    }
 
     @Override
     public List<ScheduleSearchSummaryResponseDto> searchWithCommentCount(ScheduleSearchConditionDto cond) {

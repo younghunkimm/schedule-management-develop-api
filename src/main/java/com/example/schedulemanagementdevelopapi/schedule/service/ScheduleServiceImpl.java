@@ -49,7 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional(readOnly = true)
     public ScheduleSearchDetailResponseDto findById(Long id) {
 
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findWithMemberByIdOrElseThrow(id);
         List<CommentSearchResponseDto> findCommentList = commentRepository.findAllByScheduleId(findSchedule.getId());
 
         return ScheduleSearchDetailResponseDto.from(findSchedule, findCommentList);
