@@ -3,6 +3,7 @@ package com.example.schedulemanagementdevelopapi.comment.service;
 import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentSaveResponseDto;
 import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.comment.entity.Comment;
+import com.example.schedulemanagementdevelopapi.comment.policy.CommentPolicy;
 import com.example.schedulemanagementdevelopapi.comment.repository.CommentRepository;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
@@ -20,6 +21,8 @@ public class CommentServiceImpl implements CommentService {
     private final MemberRepository memberRepository;
     private final ScheduleRepository scheduleRepository;
 
+    private final CommentPolicy commentPolicy;
+
     @Override
     @Transactional
     public CommentSaveResponseDto save(Long memberId, Long scheduleId, String content) {
@@ -35,9 +38,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentUpdateResponseDto update(Long commentId, Long memberId, Long scheduleId, String content) {
+    public CommentUpdateResponseDto update(Long commentId, Long memberId, String content) {
 
-        Comment findComment = commentRepository.findByIdAndMember_idAndSchedule_IdAndOrElseThrow(commentId, memberId, scheduleId);
+        Comment findComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        commentPolicy.checkOwnerOrThrow(findComment, memberId);
+
         findComment.updateContent(content);
 
         return CommentUpdateResponseDto.from(findComment);
@@ -45,9 +51,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void delete(Long commentId, Long memberId, Long scheduleId) {
+    public void delete(Long commentId, Long memberId) {
 
-        Comment findComment = commentRepository.findByIdAndMember_idAndSchedule_IdAndOrElseThrow(commentId, memberId, scheduleId);
+        Comment findComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        commentPolicy.checkOwnerOrThrow(findComment, memberId);
 
         findComment.softDelete();
     }

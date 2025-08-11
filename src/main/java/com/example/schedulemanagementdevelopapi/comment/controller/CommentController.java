@@ -11,13 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/schedules/{scheduleId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/schedules/{scheduleId}/comments")
     public ResponseEntity<CommentSaveResponseDto> save(
             @SessionAttribute("LOGIN_MEMBER") Long memberId,
             @PathVariable Long scheduleId,
@@ -34,11 +33,10 @@ public class CommentController {
         return ResponseEntity.ok(commentSaveResponseDto);
     }
 
-    @PatchMapping("/{commentId}")
+    @PatchMapping("/comments/{commentId}")
     public ResponseEntity<CommentUpdateResponseDto> update(
             @PathVariable Long commentId,
             @SessionAttribute("LOGIN_MEMBER") Long memberId,
-            @PathVariable Long scheduleId,
             @Valid @RequestBody CommentUpdateRequestDto requestDto
     ) {
 
@@ -46,21 +44,19 @@ public class CommentController {
                 commentService.update(
                         commentId,
                         memberId,
-                        scheduleId,
                         requestDto.getContent()
                 );
 
         return ResponseEntity.ok(commentUpdateResponseDto);
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> delete(
             @PathVariable Long commentId,
-            @SessionAttribute("LOGIN_MEMBER") Long memberId,
-            @PathVariable Long scheduleId
+            @SessionAttribute("LOGIN_MEMBER") Long memberId
     ) {
 
-        commentService.delete(commentId, memberId, scheduleId);
+        commentService.delete(commentId, memberId);
 
         return ResponseEntity.ok().build();
     }

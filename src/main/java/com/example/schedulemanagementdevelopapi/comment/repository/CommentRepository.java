@@ -2,18 +2,17 @@ package com.example.schedulemanagementdevelopapi.comment.repository;
 
 import com.example.schedulemanagementdevelopapi.comment.entity.Comment;
 import com.example.schedulemanagementdevelopapi.comment.exception.CommentErrorCode;
-import com.example.schedulemanagementdevelopapi.global.exception.UnAuthorizedException;
+import com.example.schedulemanagementdevelopapi.global.exception.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom {
 
-    Optional<Comment> findByIdAndMember_IdAndSchedule_IdAndDeletedAtIsNull(Long commentId, Long memberId, Long scheduleId);
+    Optional<Comment> findByIdAndDeletedAtIsNull(Long commentId);
 
-    default Comment findByIdAndMember_idAndSchedule_IdAndOrElseThrow(Long commentId, Long memberId, Long scheduleId) {
+    default Comment findByIdOrElseThrow(Long commentId) {
 
-        return findByIdAndMember_IdAndSchedule_IdAndDeletedAtIsNull(commentId, memberId, scheduleId)
-                .orElseThrow(() -> new UnAuthorizedException(CommentErrorCode.ACCESS_DENIED));
+        return findByIdAndDeletedAtIsNull(commentId).orElseThrow(() -> new NotFoundException(CommentErrorCode.COMMENT_NOT_FOUND));
     }
 }

@@ -7,7 +7,7 @@ public interface CommentService {
 
     CommentSaveResponseDto save(Long memberId, Long scheduleId, String content);
 
-    CommentUpdateResponseDto update(Long commentId, Long memberId, Long scheduleId, String content);
+    CommentUpdateResponseDto update(Long commentId, Long memberId, String content);
 
-    void delete(Long commentId, Long memberId, Long scheduleId);
+    void delete(Long commentId, Long memberId);
 }
