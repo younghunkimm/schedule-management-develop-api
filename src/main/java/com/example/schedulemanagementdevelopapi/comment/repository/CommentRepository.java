@@ -5,7 +5,6 @@ import com.example.schedulemanagementdevelopapi.comment.exception.CommentErrorCo
 import com.example.schedulemanagementdevelopapi.global.exception.UnAuthorizedException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom {
@@ -17,6 +16,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
         return findByIdAndMember_IdAndSchedule_IdAndDeletedAtIsNull(commentId, memberId, scheduleId)
                 .orElseThrow(() -> new UnAuthorizedException(CommentErrorCode.ACCESS_DENIED));
     }
-
-    List<Comment> findCommentsByScheduleIdAndDeletedAtIsNullOrderByModifiedAtDesc(Long scheduleId);
 }

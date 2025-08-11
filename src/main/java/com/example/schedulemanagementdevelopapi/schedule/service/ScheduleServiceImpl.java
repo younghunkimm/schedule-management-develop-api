@@ -1,7 +1,6 @@
 package com.example.schedulemanagementdevelopapi.schedule.service;
 
 import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentSearchResponseDto;
-import com.example.schedulemanagementdevelopapi.comment.entity.Comment;
 import com.example.schedulemanagementdevelopapi.comment.repository.CommentRepository;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
@@ -51,14 +50,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleSearchDetailResponseDto findById(Long id) {
 
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
-        List<Comment> findCommentList = commentRepository.findCommentsByScheduleIdAndDeletedAtIsNullOrderByModifiedAtDesc(findSchedule.getId());
+        List<CommentSearchResponseDto> findCommentList = commentRepository.findAllByScheduleId(findSchedule.getId());
 
-        return ScheduleSearchDetailResponseDto.from(
-                findSchedule,
-                findCommentList.stream()
-                        .map(CommentSearchResponseDto::from)
-                        .toList()
-        );
+        return ScheduleSearchDetailResponseDto.from(findSchedule, findCommentList);
     }
 
     @Override
