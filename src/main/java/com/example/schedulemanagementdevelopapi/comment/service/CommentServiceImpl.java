@@ -1,6 +1,7 @@
 package com.example.schedulemanagementdevelopapi.comment.service;
 
 import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentSaveResponseDto;
+import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.comment.entity.Comment;
 import com.example.schedulemanagementdevelopapi.comment.repository.CommentRepository;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
@@ -30,5 +31,15 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return CommentSaveResponseDto.from(savedComment);
+    }
+
+    @Override
+    @Transactional
+    public CommentUpdateResponseDto update(Long commentId, Long memberId, Long scheduleId, String content) {
+
+        Comment findComment = commentRepository.findByIdAndMember_idAndSchedule_IdAndOrElseThrow(commentId, memberId, scheduleId);
+        findComment.updateContent(content);
+
+        return CommentUpdateResponseDto.from(findComment);
     }
 }

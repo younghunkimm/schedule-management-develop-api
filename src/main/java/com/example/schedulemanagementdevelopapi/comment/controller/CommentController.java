@@ -1,7 +1,9 @@
 package com.example.schedulemanagementdevelopapi.comment.controller;
 
 import com.example.schedulemanagementdevelopapi.comment.dto.request.CommentSaveRequestDto;
+import com.example.schedulemanagementdevelopapi.comment.dto.request.CommentUpdateRequestDto;
 import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentSaveResponseDto;
+import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.comment.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +32,24 @@ public class CommentController {
                 );
 
         return ResponseEntity.ok(commentSaveResponseDto);
+    }
+
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<CommentUpdateResponseDto> update(
+            @PathVariable Long commentId,
+            @SessionAttribute("LOGIN_MEMBER") Long memberId,
+            @PathVariable Long scheduleId,
+            @Valid @RequestBody CommentUpdateRequestDto requestDto
+    ) {
+
+        CommentUpdateResponseDto commentUpdateResponseDto =
+                commentService.update(
+                        commentId,
+                        memberId,
+                        scheduleId,
+                        requestDto.getContent()
+                );
+
+        return ResponseEntity.ok(commentUpdateResponseDto);
     }
 }
