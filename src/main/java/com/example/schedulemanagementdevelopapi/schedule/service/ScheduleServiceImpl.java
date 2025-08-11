@@ -11,6 +11,7 @@ import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSe
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchSummaryResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
+import com.example.schedulemanagementdevelopapi.schedule.policy.SchedulePolicy;
 import com.example.schedulemanagementdevelopapi.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
+
+    private final SchedulePolicy schedulePolicy;
 
     @Override
     @Transactional
@@ -59,7 +62,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public ScheduleUpdateResponseDto update(Long id, Long memberId, ScheduleUpdateRequestDto requestDto) {
 
-        Schedule findSchedule = scheduleRepository.findByIdAndMember_IdOrElseThrow(id, memberId);
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        schedulePolicy.checkOwnerOrThrow(findSchedule, memberId);
+
         findSchedule.updateTitle(requestDto.getTitle());
         findSchedule.updateContent(requestDto.getContent());
 
@@ -70,7 +76,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public void delete(Long id, Long memberId) {
 
-        Schedule findSchedule = scheduleRepository.findByIdAndMember_IdOrElseThrow(id, memberId);
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        schedulePolicy.checkOwnerOrThrow(findSchedule, memberId);
 
         findSchedule.softDelete();
     }
