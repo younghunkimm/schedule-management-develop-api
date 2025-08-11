@@ -52,4 +52,16 @@ public class CommentController {
 
         return ResponseEntity.ok(commentUpdateResponseDto);
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long commentId,
+            @SessionAttribute("LOGIN_MEMBER") Long memberId,
+            @PathVariable Long scheduleId
+    ) {
+
+        commentService.delete(commentId, memberId, scheduleId);
+
+        return ResponseEntity.ok().build();
+    }
 }

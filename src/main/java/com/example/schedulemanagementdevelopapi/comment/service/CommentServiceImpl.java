@@ -42,4 +42,13 @@ public class CommentServiceImpl implements CommentService {
 
         return CommentUpdateResponseDto.from(findComment);
     }
+
+    @Override
+    @Transactional
+    public void delete(Long commentId, Long memberId, Long scheduleId) {
+
+        Comment findComment = commentRepository.findByIdAndMember_idAndSchedule_IdAndOrElseThrow(commentId, memberId, scheduleId);
+
+        findComment.softDelete();
+    }
 }
