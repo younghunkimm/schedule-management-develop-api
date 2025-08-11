@@ -9,6 +9,7 @@ import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveRe
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
+import com.example.schedulemanagementdevelopapi.member.policy.MemberPolicy;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,9 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+
     private final PasswordEncoder passwordEncoder;
+    private final MemberPolicy memberPolicy;
 
     @Override
     @Transactional(readOnly = true)
@@ -58,16 +61,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public MemberSearchResponseDto findById(Long id) {
+    public MemberSearchResponseDto findById(Long memberId) {
 
-        return MemberSearchResponseDto.from(memberRepository.findByIdOrElseThrow(id));
+        return MemberSearchResponseDto.from(memberRepository.findByIdOrElseThrow(memberId));
     }
 
     @Override
     @Transactional
-    public MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto requestDto) {
+    public MemberUpdateResponseDto update(Long memberId, Long authMemberId, MemberUpdateRequestDto requestDto) {
 
-        Member findMember = memberRepository.findByIdOrElseThrow(id);
+        Member findMember = memberRepository.findByIdOrElseThrow(memberId);
+
+        memberPolicy.checkOwnerOrThrow(findMember, authMemberId);
+
         findMember.updateName(requestDto.getName());
         findMember.updateEmail(requestDto.getEmail());
 
@@ -76,9 +82,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long memberId, Long authMemberId) {
 
-        Member findMember = memberRepository.findByIdOrElseThrow(id);
+        Member findMember = memberRepository.findByIdOrElseThrow(memberId);
+
+        memberPolicy.checkOwnerOrThrow(findMember, authMemberId);
 
         findMember.softDelete();
     }
