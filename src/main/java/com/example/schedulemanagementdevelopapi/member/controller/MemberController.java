@@ -85,29 +85,31 @@ public class MemberController {
         return ResponseEntity.ok(memberService.search(cond));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<MemberSearchResponseDto> findById(
-            @PathVariable Long id
+            @PathVariable Long memberId
     ) {
 
-        return ResponseEntity.ok(memberService.findById(id));
+        return ResponseEntity.ok(memberService.findById(memberId));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{memberId}")
     public ResponseEntity<MemberUpdateResponseDto> update(
-            @PathVariable Long id,
+            @PathVariable Long memberId,
+            @SessionAttribute("LOGIN_MEMBER") Long authMemberId,
             @Valid @RequestBody MemberUpdateRequestDto requestDto
     ) {
 
-        return ResponseEntity.ok(memberService.update(id, requestDto));
+        return ResponseEntity.ok(memberService.update(memberId, authMemberId, requestDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{memberId}")
     public ResponseEntity<Void> delete(
-            @PathVariable Long id
+            @PathVariable Long memberId,
+            @SessionAttribute("LOGIN_MEMBER") Long authMemberId
     ) {
 
-        memberService.delete(id);
+        memberService.delete(memberId, authMemberId);
 
         return ResponseEntity.ok().build();
     }

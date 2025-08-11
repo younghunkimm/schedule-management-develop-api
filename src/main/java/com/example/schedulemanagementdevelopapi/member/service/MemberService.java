@@ -15,11 +15,11 @@ public interface MemberService {
 
     List<MemberSearchResponseDto> search(MemberSearchConditionDto cond);
 
-    MemberSearchResponseDto findById(Long id);
+    MemberSearchResponseDto findById(Long memberId);
 
-    MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto requestDto);
+    MemberUpdateResponseDto update(Long memberId, Long authMemberId, MemberUpdateRequestDto requestDto);
 
-    void delete(Long id);
+    void delete(Long memberId, Long authMemberId);
 
     MemberLoginResponseDto login(MemberLoginRequestDto requestDto);
 }

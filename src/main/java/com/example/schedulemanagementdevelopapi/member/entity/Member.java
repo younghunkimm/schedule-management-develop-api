@@ -7,6 +7,7 @@ import com.example.schedulemanagementdevelopapi.member.exception.MemberErrorCode
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 @Entity
 @Getter
@@ -27,6 +28,11 @@ public class Member extends SoftDeletableEntity {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public boolean isOwnedBy(Long memberId) {
+
+        return ObjectUtils.nullSafeEquals(this.id, memberId);
     }
 
     public void verifyPasswordOrThrow(PasswordEncoder encoder, String rawPassword) {
