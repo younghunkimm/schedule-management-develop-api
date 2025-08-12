@@ -55,9 +55,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public ScheduleSearchDetailResponseDto findById(Long id) {
+    public ScheduleSearchDetailResponseDto findById(Long scheduleId) {
 
-        Schedule findSchedule = scheduleRepository.findWithMemberByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findWithMemberByIdOrElseThrow(scheduleId);
         List<CommentSearchResponseDto> findCommentList = commentRepository.findAllByScheduleId(findSchedule.getId());
 
         return ScheduleSearchDetailResponseDto.from(findSchedule, findCommentList);
@@ -65,9 +65,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public ScheduleUpdateResponseDto update(Long id, Long memberId, ScheduleUpdateRequestDto requestDto) {
+    public ScheduleUpdateResponseDto update(Long scheduleId, Long memberId, ScheduleUpdateRequestDto requestDto) {
 
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
         schedulePolicy.checkOwnerOrThrow(findSchedule, memberId);
 
@@ -79,9 +79,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    public void delete(Long id, Long memberId) {
+    public void delete(Long scheduleId, Long memberId) {
 
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
         schedulePolicy.checkOwnerOrThrow(findSchedule, memberId);
 

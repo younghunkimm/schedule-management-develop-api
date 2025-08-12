@@ -25,7 +25,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<Schedule> findWithMemberById(Long id) {
+    public Optional<Schedule> findWithMemberById(Long scheduleId) {
 
         QSchedule qSchedule = QSchedule.schedule;
 
@@ -34,7 +34,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                         .selectFrom(qSchedule)
                         .join(qSchedule.member).fetchJoin()
                         .where(
-                                qSchedule.id.eq(id),
+                                qSchedule.id.eq(scheduleId),
                                 qSchedule.deletedAt.isNull()
                         )
                         .fetchOne()

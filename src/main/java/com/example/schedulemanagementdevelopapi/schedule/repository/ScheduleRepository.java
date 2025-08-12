@@ -9,15 +9,15 @@ import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleRepositoryCustom {
 
-    Optional<Schedule> findByIdAndDeletedAtIsNull(Long id);
+    Optional<Schedule> findByIdAndDeletedAtIsNull(Long scheduleId);
 
-    default Schedule findByIdOrElseThrow(Long id) {
+    default Schedule findByIdOrElseThrow(Long scheduleId) {
 
-        return findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new NotFoundException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        return findByIdAndDeletedAtIsNull(scheduleId).orElseThrow(() -> new NotFoundException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
     }
 
-    default Schedule findWithMemberByIdOrElseThrow(Long id) {
+    default Schedule findWithMemberByIdOrElseThrow(Long scheduleId) {
 
-        return findWithMemberById(id).orElseThrow(() -> new NotFoundException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        return findWithMemberById(scheduleId).orElseThrow(() -> new NotFoundException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
     }
 }
