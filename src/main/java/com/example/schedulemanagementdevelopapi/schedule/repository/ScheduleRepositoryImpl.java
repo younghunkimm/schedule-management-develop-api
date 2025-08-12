@@ -11,6 +11,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -39,28 +42,31 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
     }
 
     @Override
-    public List<ScheduleSearchSummaryResponseDto> searchWithCommentCount(ScheduleSearchConditionDto cond) {
+    public Page<ScheduleSearchSummaryResponseDto> searchPageWithCommentCount(
+            ScheduleSearchConditionDto cond,
+            Pageable pageable
+    ) {
         QSchedule qSchedule = QSchedule.schedule;
         QComment qComment = QComment.comment;
         QMember qMember = QMember.member;
 
-        return queryFactory
+        List<ScheduleSearchSummaryResponseDto> content = queryFactory
                 .select(
                         Projections.constructor(ScheduleSearchSummaryResponseDto.class,
-                        qSchedule.id,
-                        qMember.name,
-                        qSchedule.title,
-                        qSchedule.content,
-                        JPAExpressions
-                                .select(qComment.id.count())
-                                .from(qComment)
-                                .where(
-                                        qComment.schedule.id.eq(qSchedule.id),
-                                        qComment.deletedAt.isNull()
-                                ),
-                        qSchedule.createdAt,
-                        qSchedule.modifiedAt
-                ))
+                                qSchedule.id,
+                                qMember.name,
+                                qSchedule.title,
+                                qSchedule.content,
+                                JPAExpressions
+                                        .select(qComment.id.count())
+                                        .from(qComment)
+                                        .where(
+                                                qComment.schedule.id.eq(qSchedule.id),
+                                                qComment.deletedAt.isNull()
+                                        ),
+                                qSchedule.createdAt,
+                                qSchedule.modifiedAt
+                        ))
                 .from(qSchedule)
                 .leftJoin(qSchedule.member, qMember)
                 .where(
@@ -68,7 +74,21 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                         containsTitle(cond.getTitle())
                 )
                 .orderBy(qSchedule.modifiedAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        long total = Optional.ofNullable(queryFactory
+                .select(qSchedule.count())
+                .from(qSchedule)
+                .where(
+                        qSchedule.deletedAt.isNull(),
+                        containsTitle(cond.getTitle())
+                )
+                .fetchOne()
+        ).orElse(0L);
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     private BooleanExpression containsTitle(String title) {

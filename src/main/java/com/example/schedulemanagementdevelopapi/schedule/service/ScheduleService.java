@@ -6,14 +6,14 @@ import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSa
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchDetailResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleSearchSummaryResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUpdateResponseDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ScheduleService {
 
     ScheduleSaveResponseDto save(Long memberId, String title, String content);
 
-    List<ScheduleSearchSummaryResponseDto> searchWithCommentCount(ScheduleSearchConditionDto cond);
+    Page<ScheduleSearchSummaryResponseDto> searchPageWithCommentCount(ScheduleSearchConditionDto cond, Pageable pageable);
 
     ScheduleSearchDetailResponseDto findById(Long id);
 
