@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ScheduleRepositoryCustom {
 
-    Optional<Schedule> findWithMemberById(Long id);
+    Optional<Schedule> findWithMemberById(Long scheduleId);
 
     Page<ScheduleSearchSummaryResponseDto> searchPageWithCommentCount(ScheduleSearchConditionDto cond, Pageable pageable);
 }

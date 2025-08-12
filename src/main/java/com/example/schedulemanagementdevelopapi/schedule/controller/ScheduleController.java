@@ -77,55 +77,55 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.searchPageWithCommentCount(cond, pageable));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{scheduleId}")
     @Operation(
             summary = "일정 단건(댓글 리스트 포함) 조회",
             description = "단건의 일정을 조회하고, 해당 일정의 댓글 리스트들을 함께 조회합니다.",
             parameters = {
-                    @Parameter(name = "id", description = "일정 번호", example = "1")
+                    @Parameter(name = "scheduleId", description = "일정 번호", example = "1")
             }
     )
     @SecurityRequirement(name = "sessionCookie")
     public ResponseEntity<ScheduleSearchDetailResponseDto> findById(
-            @PathVariable Long id
+            @PathVariable Long scheduleId
     ) {
 
-        return ResponseEntity.ok(scheduleService.findById(id));
+        return ResponseEntity.ok(scheduleService.findById(scheduleId));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{scheduleId}")
     @Operation(
             summary = "일정 수정",
             description = "일정을 수정합니다.",
             parameters = {
-                    @Parameter(name = "id", description = "일정 번호", example = "1")
+                    @Parameter(name = "scheduleId", description = "일정 번호", example = "1")
             }
     )
     @SecurityRequirement(name = "sessionCookie")
     public ResponseEntity<ScheduleUpdateResponseDto> update(
-            @PathVariable Long id,
+            @PathVariable Long scheduleId,
             @Parameter(hidden = true) @SessionAttribute("LOGIN_MEMBER") Long memberId,
             @Valid @RequestBody ScheduleUpdateRequestDto requestDto
     ) {
 
-        return ResponseEntity.ok(scheduleService.update(id, memberId, requestDto));
+        return ResponseEntity.ok(scheduleService.update(scheduleId, memberId, requestDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{scheduleId}")
     @Operation(
             summary = "일정 삭제",
             description = "일정을 삭제합니다.",
             parameters = {
-                    @Parameter(name = "id", description = "일정 번호", example = "1")
+                    @Parameter(name = "scheduleId", description = "일정 번호", example = "1")
             }
     )
     @SecurityRequirement(name = "sessionCookie")
     public ResponseEntity<Void> delete(
-            @PathVariable Long id,
+            @PathVariable Long scheduleId,
             @Parameter(hidden = true) @SessionAttribute("LOGIN_MEMBER") Long memberId
     ) {
 
-        scheduleService.delete(id, memberId);
+        scheduleService.delete(scheduleId, memberId);
 
         return ResponseEntity.ok().build();
     }

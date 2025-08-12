@@ -15,9 +15,9 @@ public interface ScheduleService {
 
     Page<ScheduleSearchSummaryResponseDto> searchPageWithCommentCount(ScheduleSearchConditionDto cond, Pageable pageable);
 
-    ScheduleSearchDetailResponseDto findById(Long id);
+    ScheduleSearchDetailResponseDto findById(Long scheduleId);
 
-    ScheduleUpdateResponseDto update(Long id, Long memberId, ScheduleUpdateRequestDto requestDto);
+    ScheduleUpdateResponseDto update(Long scheduleId, Long memberId, ScheduleUpdateRequestDto requestDto);
 
-    void delete(Long id, Long memberId);
+    void delete(Long scheduleId, Long memberId);
 }
