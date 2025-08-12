@@ -14,6 +14,8 @@ import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import com.example.schedulemanagementdevelopapi.schedule.policy.SchedulePolicy;
 import com.example.schedulemanagementdevelopapi.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +45,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ScheduleSearchSummaryResponseDto> searchWithCommentCount(ScheduleSearchConditionDto cond) {
+    public Page<ScheduleSearchSummaryResponseDto> searchPageWithCommentCount(
+            ScheduleSearchConditionDto cond,
+            Pageable pageable
+    ) {
 
-        return scheduleRepository.searchWithCommentCount(cond);
+        return scheduleRepository.searchPageWithCommentCount(cond, pageable);
     }
 
     @Override

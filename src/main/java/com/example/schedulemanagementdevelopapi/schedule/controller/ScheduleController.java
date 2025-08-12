@@ -10,10 +10,11 @@ import com.example.schedulemanagementdevelopapi.schedule.dto.response.ScheduleUp
 import com.example.schedulemanagementdevelopapi.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -39,11 +40,12 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleSearchSummaryResponseDto>> searchWithCommentCount(
-            @ModelAttribute ScheduleSearchConditionDto cond
+    public ResponseEntity<Page<ScheduleSearchSummaryResponseDto>> searchPageWithCommentCount(
+            @ModelAttribute ScheduleSearchConditionDto cond,
+            @PageableDefault(size = 10) Pageable pageable
     ) {
 
-        return ResponseEntity.ok(scheduleService.searchWithCommentCount(cond));
+        return ResponseEntity.ok(scheduleService.searchPageWithCommentCount(cond, pageable));
     }
 
     @GetMapping("/{id}")
