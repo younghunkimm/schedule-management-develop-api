@@ -42,6 +42,11 @@ dependencies {
 
     // === bcrypt 시작 ===
     implementation 'at.favre.lib:bcrypt:0.10.2'
+    // === bcrypt 종료 ===
+
+    // === springdoc-openapi (swagger) 시작 ===
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.9'
+    // === springdoc-openapi (swagger) 종료 ===
 }
 
 // === queryDSL 설정 시작 (Gradle 8.x) ===

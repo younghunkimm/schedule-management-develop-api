@@ -12,7 +12,16 @@ import java.io.IOException;
 @Slf4j
 public class LoginFilter implements Filter {
 
-    private static final String[] WHITE_LIST = { "/", "/members/signup", "/members/login" };
+    private static final String[] WHITE_LIST = {
+            "/",
+            // Swagger UI & OpenAPI
+            "/swagger-ui/**",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            // public
+            "/members/signup",
+            "/members/login"
+    };
 
     @Override
     public void doFilter(
