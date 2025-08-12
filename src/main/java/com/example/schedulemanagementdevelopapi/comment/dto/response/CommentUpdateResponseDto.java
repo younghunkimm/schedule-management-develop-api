@@ -2,9 +2,11 @@ package com.example.schedulemanagementdevelopapi.comment.dto.response;
 
 import com.example.schedulemanagementdevelopapi.comment.entity.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record CommentUpdateResponseDto(
         @Schema(description = "댓글 번호")
         Long id,
@@ -15,11 +17,12 @@ public record CommentUpdateResponseDto(
 ) {
 
     public static CommentUpdateResponseDto from(Comment comment) {
-        return new CommentUpdateResponseDto(
-                comment.getId(),
-                comment.getContent(),
-                comment.getCreatedAt(),
-                comment.getModifiedAt()
-        );
+
+        return CommentUpdateResponseDto.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .modifiedAt(comment.getModifiedAt())
+                .build();
     }
 }
