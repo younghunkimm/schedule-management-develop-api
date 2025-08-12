@@ -2,9 +2,11 @@ package com.example.schedulemanagementdevelopapi.schedule.dto.response;
 
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record ScheduleSearchSummaryResponseDto(
         @Schema(description = "일정 번호")
         Long id,
@@ -21,14 +23,15 @@ public record ScheduleSearchSummaryResponseDto(
 ) {
 
     public static ScheduleSearchSummaryResponseDto from(Schedule schedule, long commentCount) {
-        return new ScheduleSearchSummaryResponseDto(
-                schedule.getId(),
-                schedule.getMember().getName(),
-                schedule.getTitle(),
-                schedule.getContent(),
-                commentCount,
-                schedule.getCreatedAt(),
-                schedule.getModifiedAt()
-        );
+
+        return ScheduleSearchSummaryResponseDto.builder()
+                .id(schedule.getId())
+                .writer(schedule.getMember().getName())
+                .title(schedule.getTitle())
+                .content(schedule.getContent())
+                .commentCount(commentCount)
+                .createdAt(schedule.getCreatedAt())
+                .modifiedAt(schedule.getModifiedAt())
+                .build();
     }
 }

@@ -3,10 +3,12 @@ package com.example.schedulemanagementdevelopapi.schedule.dto.response;
 import com.example.schedulemanagementdevelopapi.comment.dto.response.CommentSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 public record ScheduleSearchDetailResponseDto(
         @Schema(description = "일정 번호")
         Long id,
@@ -23,14 +25,15 @@ public record ScheduleSearchDetailResponseDto(
 ) {
 
     public static ScheduleSearchDetailResponseDto from(Schedule schedule, List<CommentSearchResponseDto> comments) {
-        return new ScheduleSearchDetailResponseDto(
-                schedule.getId(),
-                schedule.getMember().getName(),
-                schedule.getTitle(),
-                schedule.getContent(),
-                comments,
-                schedule.getCreatedAt(),
-                schedule.getModifiedAt()
-        );
+
+        return ScheduleSearchDetailResponseDto.builder()
+                .id(schedule.getId())
+                .writer(schedule.getMember().getName())
+                .title(schedule.getTitle())
+                .content(schedule.getContent())
+                .comments(comments)
+                .createdAt(schedule.getCreatedAt())
+                .modifiedAt(schedule.getModifiedAt())
+                .build();
     }
 }

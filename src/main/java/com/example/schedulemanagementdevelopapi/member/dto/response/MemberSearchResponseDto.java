@@ -2,9 +2,11 @@ package com.example.schedulemanagementdevelopapi.member.dto.response;
 
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 public record MemberSearchResponseDto(
         @Schema(description = "유저 번호")
         Long id,
@@ -17,12 +19,13 @@ public record MemberSearchResponseDto(
 ) {
 
     public static MemberSearchResponseDto from(Member member) {
-        return new MemberSearchResponseDto(
-                member.getId(),
-                member.getName(),
-                member.getEmail(),
-                member.getCreatedAt(),
-                member.getModifiedAt()
-        );
+
+        return MemberSearchResponseDto.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .email(member.getEmail())
+                .createdAt(member.getCreatedAt())
+                .modifiedAt(member.getModifiedAt())
+                .build();
     }
 }

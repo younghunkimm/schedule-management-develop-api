@@ -2,9 +2,11 @@ package com.example.schedulemanagementdevelopapi.schedule.dto.response;
 
 import com.example.schedulemanagementdevelopapi.schedule.entity.Schedule;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Schema(description = "일정 생성 Response DTO")
 public record ScheduleSaveResponseDto(
         @Schema(description = "일정 번호")
@@ -20,13 +22,14 @@ public record ScheduleSaveResponseDto(
 ) {
 
     public static ScheduleSaveResponseDto from(Schedule schedule) {
-        return new ScheduleSaveResponseDto(
-                schedule.getId(),
-                schedule.getMember().getName(),
-                schedule.getTitle(),
-                schedule.getContent(),
-                schedule.getCreatedAt(),
-                schedule.getModifiedAt()
-        );
+
+        return ScheduleSaveResponseDto.builder()
+                .id(schedule.getId())
+                .writer(schedule.getMember().getName())
+                .title(schedule.getTitle())
+                .content(schedule.getContent())
+                .createdAt(schedule.getCreatedAt())
+                .modifiedAt(schedule.getModifiedAt())
+                .build();
     }
 }

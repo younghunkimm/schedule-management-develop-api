@@ -1,10 +1,12 @@
 package com.example.schedulemanagementdevelopapi.global.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@Builder
 public record ErrorResponseDto (
         @Schema(description = "Http 응답 상태코드")
         int status,
@@ -20,10 +22,26 @@ public record ErrorResponseDto (
 ) {
 
     public static ErrorResponseDto of(int status, String code, String message, String path) {
-        return new ErrorResponseDto(status, code, message, path, LocalDateTime.now(), null);
+
+        return ErrorResponseDto.builder()
+                .status(status)
+                .code(code)
+                .message(message)
+                .path(path)
+                .timestamp(LocalDateTime.now())
+                .data(null)
+                .build();
     }
 
     public static ErrorResponseDto of(int status, String code, String message, String path, Map<String, String> data) {
-        return new ErrorResponseDto(status, code, message, path, LocalDateTime.now(), data);
+
+        return ErrorResponseDto.builder()
+                .status(status)
+                .code(code)
+                .message(message)
+                .path(path)
+                .timestamp(LocalDateTime.now())
+                .data(data)
+                .build();
     }
 }
