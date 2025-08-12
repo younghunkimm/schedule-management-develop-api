@@ -1,6 +1,7 @@
 package com.example.schedulemanagementdevelopapi.member.service;
 
 import com.example.schedulemanagementdevelopapi.global.config.PasswordEncoder;
+import com.example.schedulemanagementdevelopapi.global.exception.BusinessException;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberLoginRequestDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberSearchConditionDto;
 import com.example.schedulemanagementdevelopapi.member.dto.request.MemberUpdateRequestDto;
@@ -9,6 +10,7 @@ import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSaveRe
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberSearchResponseDto;
 import com.example.schedulemanagementdevelopapi.member.dto.response.MemberUpdateResponseDto;
 import com.example.schedulemanagementdevelopapi.member.entity.Member;
+import com.example.schedulemanagementdevelopapi.member.exception.MemberErrorCode;
 import com.example.schedulemanagementdevelopapi.member.policy.MemberPolicy;
 import com.example.schedulemanagementdevelopapi.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberSaveResponseDto save(String name, String email, String password) {
+
+        if (memberRepository.existsByEmail(email)) {
+            throw new BusinessException(MemberErrorCode.DUPLICATE_EMAIL);
+        }
 
         String encodedPassword = passwordEncoder.encode(password);
 
