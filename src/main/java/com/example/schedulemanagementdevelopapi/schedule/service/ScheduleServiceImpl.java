@@ -74,6 +74,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         findSchedule.updateTitle(requestDto.getTitle());
         findSchedule.updateContent(requestDto.getContent());
 
+        scheduleRepository.saveAndFlush(findSchedule);
+
         return ScheduleUpdateResponseDto.from(findSchedule);
     }
 

@@ -46,6 +46,8 @@ public class CommentServiceImpl implements CommentService {
 
         findComment.updateContent(content);
 
+        commentRepository.saveAndFlush(findComment);
+
         return CommentUpdateResponseDto.from(findComment);
     }
 
