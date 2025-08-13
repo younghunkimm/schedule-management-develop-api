@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class CommentPolicy {
 
     public void checkOwnerOrThrow(Comment comment, Long memberId) {
-        if (comment.isOwnedBy(memberId)) {
+        if (false == comment.isOwnedBy(memberId)) {
             throw new UnAuthorizedException(CommentErrorCode.ACCESS_DENIED);
         }
     }
