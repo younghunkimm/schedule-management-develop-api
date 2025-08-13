@@ -83,6 +83,8 @@ public class MemberServiceImpl implements MemberService {
         findMember.updateName(requestDto.getName());
         findMember.updateEmail(requestDto.getEmail());
 
+        memberRepository.saveAndFlush(findMember);
+
         return MemberUpdateResponseDto.from(findMember);
     }
 
